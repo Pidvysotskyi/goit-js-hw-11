@@ -14,6 +14,15 @@ export default class apiService {
       .get(
         `${BASE_URL}?key=${KEY}&q=${this.searchQuery}&image_type=photo&orientation=horizontal&safesearch=true&page=${this.page}&per_page=40`
       )
-      .then(({ data }) => data);
+      .then(({ data }) => {
+        this.incrementPage();
+        return data;
+      });
+  }
+  incrementPage() {
+    this.page += 1;
+  }
+  resetPage() {
+    this.page = 1;
   }
 }

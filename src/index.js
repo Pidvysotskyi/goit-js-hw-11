@@ -1,14 +1,28 @@
+import './css/styles.css';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import apiService from './server-api';
 
 const newService = new apiService();
 const galleryRef = document.querySelector('.gallery');
 const submitFormRef = document.querySelector('#search-form');
+const loadMoreButtonRef = document.querySelector('.load-more');
 
 submitFormRef.addEventListener('submit', onFormSubmit);
+loadMoreButtonRef.addEventListener('click', onLoadButtonCkick);
+
+const shownPictures = galleryRef.children.length;
+
+function onLoadButtonCkick() {
+  newService.getPictures().then(({ totalHits, hits }) => {
+    console.log(totalHits);
+    createGalleryMarkup(hits);
+  });
+}
 
 function onFormSubmit(evt) {
   evt.preventDefault();
+  clearGalery();
+  newService.resetPage();
   newService.searchQuery = evt.target.elements.searchQuery.value;
   htmlRequest();
 }
@@ -54,5 +68,9 @@ function createGalleryMarkup(array) {
     })
     .join('');
 
-  galleryRef.insertAdjacentHTML('afterBegin', galeryMarkup);
+  galleryRef.insertAdjacentHTML('beforeEnd', galeryMarkup);
+}
+
+function clearGalery() {
+  galleryRef.innerHTML = '';
 }
