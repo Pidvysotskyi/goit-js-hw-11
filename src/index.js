@@ -1,10 +1,58 @@
-import axios from 'axios';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import apiService from './server-api';
 
 const newService = new apiService();
+const galleryRef = document.querySelector('.gallery');
+const submitFormRef = document.querySelector('#search-form');
 
-newService.getPictures().then(data => {
-  console.log(data);
-});
+submitFormRef.addEventListener('submit', onFormSubmit);
 
-function createPhotoMarkup(array) {}
+function onFormSubmit(evt) {
+  evt.preventDefault();
+  newService.searchQuery = evt.target.elements.searchQuery.value;
+  htmlRequest();
+}
+
+function htmlRequest() {
+  newService.getPictures().then(({ totalHits, hits }) => {
+    if (hits.length === 0) {
+      Notify.failure(
+        'Sorry, there are no images matching your search query. Please try again.'
+      );
+    } else {
+      createGalleryMarkup(hits);
+      Notify.success(`Horray! We found ${totalHits} images`);
+    }
+  });
+}
+
+function createGalleryMarkup(array) {
+  const galeryMarkup = array
+    .map(({ previewURL, tags, likes, views, comments, downloads }) => {
+      return `
+    <div class="photo-card">
+  <img src="${previewURL}" alt="${tags}" loading="lazy" />
+  <div class="info">
+    <p class="info-item">
+      <b>Likes:</b>
+      ${likes}
+    </p>
+    <p class="info-item">
+      <b>Views:</b>
+      ${views}
+    </p>
+    <p class="info-item">
+      <b>Comments:</b>
+      ${comments}
+    </p>
+    <p class="info-item">
+      <b>Downloads:</b>
+      ${downloads}
+    </p>
+  </div>
+</div>`;
+    })
+    .join('');
+
+  galleryRef.insertAdjacentHTML('afterBegin', galeryMarkup);
+}
