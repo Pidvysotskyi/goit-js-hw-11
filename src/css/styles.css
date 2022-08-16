@@ -29,3 +29,10 @@ img {
 .photo-card img {
   width: 100%;
 }
+
+.load-more {
+  background-color: blue;
+}
+.load-more.is-hidden {
+  display: none;
+}

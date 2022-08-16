@@ -5,7 +5,7 @@ const KEY = '29264907-2ab68c5d7b62ca0acfac904a2';
 
 export default class apiService {
   constructor() {
-    this.searchQuery = 'cat';
+    this.searchQuery = '';
     this.page = 1;
   }
 
@@ -24,5 +24,13 @@ export default class apiService {
   }
   resetPage() {
     this.page = 1;
+  }
+
+  get query() {
+    return this.searchQuery;
+  }
+
+  set query(newQuery) {
+    this.searchQuery = newQuery;
   }
 }

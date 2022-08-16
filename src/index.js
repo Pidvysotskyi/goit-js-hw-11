@@ -10,20 +10,23 @@ const loadMoreButtonRef = document.querySelector('.load-more');
 submitFormRef.addEventListener('submit', onFormSubmit);
 loadMoreButtonRef.addEventListener('click', onLoadButtonCkick);
 
-const shownPictures = galleryRef.children.length;
-
 function onLoadButtonCkick() {
   newService.getPictures().then(({ totalHits, hits }) => {
-    console.log(totalHits);
     createGalleryMarkup(hits);
+    if (galleryRef.children.length >= totalHits) {
+      Notify.info(`We're sorry, but you've reached the end of search results.`);
+      loadMoreButtonRef.classList.add('is-hidden');
+    }
   });
 }
 
 function onFormSubmit(evt) {
   evt.preventDefault();
+  loadMoreButtonRef.classList.add('is-hidden');
   clearGalery();
   newService.resetPage();
-  newService.searchQuery = evt.target.elements.searchQuery.value;
+  newService.query = evt.target.elements.searchQuery.value;
+  console.log(newService.query);
   htmlRequest();
 }
 
@@ -36,6 +39,7 @@ function htmlRequest() {
     } else {
       createGalleryMarkup(hits);
       Notify.success(`Horray! We found ${totalHits} images`);
+      loadMoreButtonRef.classList.remove('is-hidden');
     }
   });
 }
