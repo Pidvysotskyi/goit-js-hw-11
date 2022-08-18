@@ -9,15 +9,12 @@ export default class apiService {
     this.page = 1;
   }
 
-  getPictures() {
-    return axios
-      .get(
-        `${BASE_URL}?key=${KEY}&q=${this.searchQuery}&image_type=photo&orientation=horizontal&safesearch=true&page=${this.page}&per_page=40`
-      )
-      .then(({ data }) => {
-        this.incrementPage();
-        return data;
-      });
+  async getPictures() {
+    const responce = await axios.get(
+      `${BASE_URL}?key=${KEY}&q=${this.searchQuery}&image_type=photo&orientation=horizontal&safesearch=true&page=${this.page}&per_page=40`
+    );
+    this.incrementPage();
+    return responce.data;
   }
   incrementPage() {
     this.page += 1;
@@ -34,3 +31,14 @@ export default class apiService {
     this.searchQuery = newQuery;
   }
 }
+
+// getPictures() {
+//     return axios
+//       .get(
+//         `${BASE_URL}?key=${KEY}&q=${this.searchQuery}&image_type=photo&orientation=horizontal&safesearch=true&page=${this.page}&per_page=40`
+//       )
+//       .then(({ data }) => {
+//         this.incrementPage();
+//         return data;
+//       });
+//   }

@@ -31,7 +31,8 @@ img {
 }
 
 .load-more {
-  background-color: blue;
+  background-color: rgb(194, 194, 239);
+  padding: 6px;
 }
 .load-more.is-hidden {
   display: none;

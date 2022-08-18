@@ -8,6 +8,7 @@ const submitFormRef = document.querySelector('#search-form');
 const loadMoreButtonRef = document.querySelector('.load-more');
 
 submitFormRef.addEventListener('submit', onFormSubmit);
+
 loadMoreButtonRef.addEventListener('click', onLoadButtonCkick);
 
 function onLoadButtonCkick() {
@@ -21,13 +22,15 @@ function onLoadButtonCkick() {
 }
 
 function onFormSubmit(evt) {
-  evt.preventDefault();
-  loadMoreButtonRef.classList.add('is-hidden');
-  clearGalery();
-  newService.resetPage();
-  newService.query = evt.target.elements.searchQuery.value;
-  console.log(newService.query);
-  htmlRequest();
+  const searchQuery = evt.target.elements.searchQuery.value.trim();
+  if (searchQuery !== '') {
+    evt.preventDefault();
+    loadMoreButtonRef.classList.add('is-hidden');
+    clearGalery();
+    newService.resetPage();
+    newService.query = searchQuery;
+    htmlRequest();
+  }
 }
 
 function htmlRequest() {
